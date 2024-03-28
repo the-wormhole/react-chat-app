@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,35 @@
   to {
     transform: rotate(360deg);
   }
+} */
+
+/* .flex{
+  display: flex;
+} */
+
+.container{
+  width: 100%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  /* padding-top: 34%; */
+}
+.size{
+  font-size:xx-large
+}
+
+#menu{
+  padding-top: 10%;
+
+}
+
+#menu button{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size:x-large
 }
