@@ -7,7 +7,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   width: 100vw;
   height: 100vh;
-  background-image: url('https://img.freepik.com/free-vector/watercolor-mint-background_23-2150241023.jpg?t=st=1711586392~exp=1711589992~hmac=49898e99dc98d560941cd0850ec722b0691f4e0b0c194f5d1bcd7f42346acb74&w=740');
+  background-image: url('https://e0.pxfuel.com/wallpapers/436/464/desktop-wallpaper-pastel-rainbow-background-on-rainbow-gradient-background-pastel-background.jpg');
+  /* ('https://img.freepik.com/free-vector/watercolor-mint-background_23-2150241023.jpg?t=st=1711586392~exp=1711589992~hmac=49898e99dc98d560941cd0850ec722b0691f4e0b0c194f5d1bcd7f42346acb74&w=740'); */
   background-size: cover;
   background-position: center;
 }
