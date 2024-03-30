@@ -41,9 +41,9 @@ export function CreateChat(){
   }
 
   return(
-    <div>
+    <div className='container'>
       <h1>Create</h1>
-      <form onSubmit={create}>
+      <form onSubmit={create} className='form-style'>
 
         <input 
           id='cname'
