@@ -1,4 +1,5 @@
-import './App.css';
+import './styles/App.css';
+import Chat from './Chat.js';
 import {useState} from 'react'
 
 function Home(){
@@ -68,6 +69,11 @@ export function CreateChat(){
       </form>
     </div>
   )
+}
+
+export function ChatApp(){
+
+  return <Chat/>;
 }
 
 export function App() {
