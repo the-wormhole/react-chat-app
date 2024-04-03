@@ -1,6 +1,8 @@
 import './styles/App.css';
 import Chat from './Chat.js';
 import {useState} from 'react'
+import { Link, useNavigate, Outlet, Navigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 function Home(){
   return (
@@ -8,12 +10,17 @@ function Home(){
       <span className='size'>Welcome to the Gossip Engine 😈</span>
 
       <section id='menu'>
-        <button>
-          Create Chat
-        </button>
-        <button>
-          Join Chat
-        </button>
+        <Link to="/create">        
+          <button>
+            Create Chat
+          </button>
+        </Link>
+
+        <Link to="/about">        
+          <button>
+            Join Chat
+          </button>
+        </Link>
       </section>
     </div>
   );
@@ -25,6 +32,7 @@ export function CreateChat(){
   // Math.random()*100000
   const [cname,setCname] = useState("");
   const [uname,setUname] = useState("");
+  const navigate = useNavigate();
 
   function create(event){
   
@@ -38,7 +46,9 @@ export function CreateChat(){
     }
   
     //make request to websockets to create chat
+    Cookies.set('user',uname);
     window.alert(`${cname} was create by user - ${uname}`);
+    navigate('/chat');
   }
 
   return(

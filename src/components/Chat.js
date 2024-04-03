@@ -1,5 +1,8 @@
 import {useState} from 'react'
 import './styles/Chat.css'
+import Cookies from "js-cookie";
+// import {App} from "./App"
+import { useNavigate } from 'react-router-dom';
 
 function ChatBox(props){
 
@@ -7,7 +10,13 @@ function ChatBox(props){
     const send = (event) =>{
         event.preventDefault();
         if(message.length > 0){
-            props.addMessage(message); // Call the function to update state in Chat
+
+            let newMessage = {
+                username:Cookies.get("user"),
+                text:message
+            };
+
+            props.addMessage(newMessage); // Call the function to update state in Chat
             setMessage('');
             return;
         }
@@ -38,7 +47,13 @@ function Messages(props){
             {/* {messageStore.forEach((message)=>{
                     <li>Username:{message}</li>
             })} */}
-            {props.messageStore.map(message => (<li key = {ctr++} className="sent">Username:{message}</li>))}
+            {props.messageStore.map((message) => {
+                let username = Cookies.get("user");
+                if(message.username === username){
+                    return (<li key = {ctr++} className="sent">{username}:{message.text}</li>);
+                }
+                return (<li key = {ctr++} className="received">{message.username}:{message.text}</li>);
+            })}
             {/* props.messageStore.indexOf(message) */}
             {/* <li>hey</li> */}
         </ul>
@@ -47,16 +62,23 @@ function Messages(props){
 
 function Chat(){
 
-    const [messageStore, setMessageStore] = useState(["hello", "Hey"]);
+    const [messageStore, setMessageStore] = useState([{username:"user1",text:"hello"}, {username:"user2",text:"Hey"}]);
 
     const addMessage = (newMessage) => {
       setMessageStore((prevMessages) => [...prevMessages, newMessage]); // Create a new array
+    };
+    const navigate = useNavigate();
+
+    const leave = () => {
+        Cookies.remove("user");
+        navigate('/');
     };
 
     return (
         <div className='container'>
             <div id="chat-name">
                 <h1>Chat Name</h1>
+                <button id='leave' onClick={leave}>Leave Chat</button>
             </div>
             <Messages messageStore={messageStore}/>
             <ChatBox addMessage={addMessage}/>

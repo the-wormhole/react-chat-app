@@ -9,6 +9,19 @@
     /* padding-bottom: 5%; */
     /* padding-top: 34%; */
   }
+  /* #chat-name{
+   
+  }
+  #chat-name h1{
+    display: inline;
+  } */
+  #leave{
+    /* display: block; */
+    background-color: red;
+    color: white;
+    box-shadow: none;
+    font-size: xx-large;
+  }
 
   #form{
     width: 100%;
@@ -60,3 +73,4 @@
     word-wrap: normal;
     padding-right: 2px;
   }
+
