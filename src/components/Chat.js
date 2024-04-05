@@ -1,8 +1,11 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import './styles/Chat.css'
 import Cookies from "js-cookie";
 // import {App} from "./App"
+import io from 'socket.io-client'
 import { useNavigate } from 'react-router-dom';
+
+const socket = io('http://localhost:5000');
 
 function ChatBox(props){
 
@@ -17,6 +20,7 @@ function ChatBox(props){
             };
 
             props.addMessage(newMessage); // Call the function to update state in Chat
+            socket.emit('message', newMessage);
             setMessage('');
             return;
         }
@@ -42,20 +46,16 @@ function ChatBox(props){
 function Messages(props){
 
     var ctr = 0;
+    let username = Cookies.get("user");
     return(
         <ul type="none" id='messages'>
-            {/* {messageStore.forEach((message)=>{
-                    <li>Username:{message}</li>
-            })} */}
             {props.messageStore.map((message) => {
-                let username = Cookies.get("user");
-                if(message.username === username){
+                
+                if(username && message.username === username){
                     return (<li key = {ctr++} className="sent">{username}:{message.text}</li>);
                 }
                 return (<li key = {ctr++} className="received">{message.username}:{message.text}</li>);
             })}
-            {/* props.messageStore.indexOf(message) */}
-            {/* <li>hey</li> */}
         </ul>
     )
 }
@@ -67,6 +67,24 @@ function Chat(){
     const addMessage = (newMessage) => {
       setMessageStore((prevMessages) => [...prevMessages, newMessage]); // Create a new array
     };
+
+    useEffect(() =>{
+        let username = Cookies.get("user");
+
+        if(!username){          // Checking if the user cookie is set
+            alert("Username is required to join the chat!!");
+            navigate('/');
+        }
+        socket.on('message',(msg) => {
+            addMessage(msg);
+        });
+
+        return () => {
+            // Cleanup function when component unmounts
+            socket.disconnect();
+          };
+    },[]);
+
     const navigate = useNavigate();
 
     const leave = () => {
