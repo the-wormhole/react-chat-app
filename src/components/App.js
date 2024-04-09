@@ -16,7 +16,7 @@ function Home(){
           </button>
         </Link>
 
-        <Link to="/about">        
+        <Link to="/join">        
           <button>
             Join Chat
           </button>
@@ -76,6 +76,46 @@ export function CreateChat(){
           onChange={(e) =>{setUname(e.target.value)}}
           />
         <button type='submit'>Create</button>
+      </form>
+    </div>
+  )
+}
+
+export function JoinChat(){
+
+  const [cname,setCname] = useState("");
+  const [uname,setUname] = useState("");
+
+  const join = (event) =>{
+    event.preventDefault();
+    alert(`Joining the chat:${cname} as the user ${uname}`);
+  }
+  return (
+    <div className='container'>
+      {/* <h1>hello join karlo</h1> */}
+      <h1>Join chat</h1>
+      <form onSubmit={join} className='form-style'>
+
+        <input 
+          id='cname'
+          name='cname'
+          type="text" 
+          value={cname}
+          placeholder='Chat Name'
+          onChange={(e) =>{setCname(e.target.value)}}
+          required 
+          />
+
+        <input 
+          id='uname' 
+          name='uname' 
+          type="text"
+          value={uname}
+          placeholder='User Name'
+          required
+          onChange={(e) =>{setUname(e.target.value)}}
+          />
+        <button type='submit'>Join</button>
       </form>
     </div>
   )

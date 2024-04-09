@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import {App,CreateChat, ChatApp} from './components/App';
+import {App,CreateChat, ChatApp, JoinChat} from './components/App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 
@@ -12,6 +12,7 @@ root.render(
       <Route path='/create' element={<CreateChat />}/>
       <Route path='/' element={<App />}/>
       <Route path='/chat' element={<ChatApp/>}/>
+      <Route path='/join' element={<JoinChat/>}/>
     </Routes>
     {/* <App /> */}
   </BrowserRouter>

@@ -19,6 +19,10 @@ function ChatBox(props){
                 text:message
             };
 
+            if(!socket.connected){
+                socket.connect(); // To re-initiate a socket connection after a user leaves a chat and reconnects later
+            }
+
             props.addMessage(newMessage); // Call the function to update state in Chat
             socket.emit('message', newMessage);
             setMessage('');
@@ -89,6 +93,7 @@ function Chat(){
 
     const leave = () => {
         Cookies.remove("user");
+        socket.disconnect();
         navigate('/');
     };
 
