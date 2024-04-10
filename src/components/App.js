@@ -37,7 +37,7 @@ export function CreateChat(){
   function create(event){
   
     event.preventDefault();
-    console.log(event);
+    //console.log(event);
     if(!cname || !uname){
       console.log(cname);
       console.log(uname)
@@ -47,6 +47,7 @@ export function CreateChat(){
   
     //make request to websockets to create chat
     Cookies.set('user',uname);
+    Cookies.set('roomName',cname);
     window.alert(`${cname} was create by user - ${uname}`);
     navigate('/chat');
   }
@@ -85,14 +86,27 @@ export function JoinChat(){
 
   const [cname,setCname] = useState("");
   const [uname,setUname] = useState("");
+  const navigate = useNavigate();
 
   const join = (event) =>{
     event.preventDefault();
+
+    if(!cname || !uname){
+      console.log(cname);
+      console.log(uname)
+      window.alert(`Chat Name and User Name both are required!!`);
+      return;
+    }
+
+    Cookies.set('user',uname);
+    Cookies.set('roomName',cname);
+
     alert(`Joining the chat:${cname} as the user ${uname}`);
+    navigate('/chat');
   }
   return (
     <div className='container'>
-      {/* <h1>hello join karlo</h1> */}
+
       <h1>Join chat</h1>
       <form onSubmit={join} className='form-style'>
 

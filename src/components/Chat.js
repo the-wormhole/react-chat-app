@@ -3,7 +3,7 @@ import './styles/Chat.css'
 import Cookies from "js-cookie";
 // import {App} from "./App"
 import io from 'socket.io-client'
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 
 const socket = io('http://localhost:5000');
 
@@ -67,6 +67,16 @@ function Messages(props){
 function Chat(){
 
     const [messageStore, setMessageStore] = useState([{username:"user1",text:"hello"}, {username:"user2",text:"Hey"}]);
+    //useState(roomMessages.messages);
+
+    const opts = {
+        method:"GET",
+        headers:{"Content-Type":"application/json"},
+        //body:JSON.stringify({Gquery})
+      };
+    
+    //console.log(messageStore);
+    //console.log(messages);
 
     const addMessage = (newMessage) => {
       setMessageStore((prevMessages) => [...prevMessages, newMessage]); // Create a new array
@@ -74,6 +84,15 @@ function Chat(){
 
     useEffect(() =>{
         let username = Cookies.get("user");
+        const name = Cookies.get("roomName");
+        
+        fetch(`http://localhost:5000/join?name=${name}`,opts)
+        .then((res) =>res.json())
+        .then((messages) =>{
+            console.log(messages);
+            setMessageStore(messages.messages)
+        })
+        .catch((err) => console.log(err));
 
         if(!username){          // Checking if the user cookie is set
             alert("Username is required to join the chat!!");

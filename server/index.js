@@ -2,17 +2,26 @@ const express = require('express');
 const app = express();
 const http = require("http").createServer(app);
 const db = require("./_db");    //replace with Redis
+const cors = require("cors");
 const io = require("socket.io")(http,{
     cors:{
         origin:"http://localhost:3000",
     },
 });
 
+app.use(cors());
+
 http.listen(5000,() => {
     console.log("Server running at port 5000!!")
 })
 
 app.get("/join",(req,res,err)=>{
+
+    //console.log("here");
+    res.set({
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+    });
     const roomName = req.query.name;
 
     if(roomName && roomName.length < 1){
@@ -20,13 +29,18 @@ app.get("/join",(req,res,err)=>{
     }
 
     if(db.hasOwnProperty(roomName)){
-        return res.status(200).json(db.roomName);
+        console.log(db[roomName]);
+        return res.status(200).json(db[roomName]);
     }
     return res.status(404).send("Room Not Found!!");
 });
 
 app.post("/create",(req,res,err)=>{
 
+    res.set({
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+    });
     const roomName = req.query.name;
     if(db.hasOwnProperty(roomName)){
         return res.status(409).send("Room already exists!!");
