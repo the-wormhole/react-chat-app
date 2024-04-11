@@ -15,9 +15,8 @@ http.listen(5000,() => {
     console.log("Server running at port 5000!!")
 })
 
-app.get("/join",(req,res,err)=>{
+app.get("/join",(req,res)=>{
 
-    //console.log("here");
     res.set({
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
@@ -29,13 +28,13 @@ app.get("/join",(req,res,err)=>{
     }
 
     if(db.hasOwnProperty(roomName)){
-        console.log(db[roomName]);
+        //console.log(db[roomName]);
         return res.status(200).json(db[roomName]);
     }
-    return res.status(404).send("Room Not Found!!");
+    res.status(404).send("Room Not Found!!");
 });
 
-app.post("/create",(req,res,err)=>{
+app.post("/create",(req,res)=>{
 
     res.set({
         "Content-Type": "application/json",
@@ -61,9 +60,21 @@ io.on('connection',(socket) =>{
 
     socket.on('message', (msg) =>{
         console.log("Message Received:",msg);       // Remove excess logging later for production
+        db[msg.roomName].messages.push(msg);
         socket.broadcast.emit('message',msg);
     });
 
+    socket.on('joinRoom', (roomName) => {
+        socket.join(roomName);
+        // Retrieve message history from Redis and emit to user
+        // client.HGET(`room:${roomName}`, 'messages', (err, messages) => {
+        //   if (err) {
+        //     console.error(err);
+        //     return;
+        //   }
+        //   socket.emit('messages', JSON.parse(messages) || []);
+        // });
+    });
     socket.on('disconnect', () => {
         console.log('A user disconnected');
     });

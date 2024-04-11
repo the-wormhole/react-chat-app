@@ -3,7 +3,7 @@ import './styles/Chat.css'
 import Cookies from "js-cookie";
 // import {App} from "./App"
 import io from 'socket.io-client'
-import { json, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const socket = io('http://localhost:5000');
 
@@ -16,7 +16,8 @@ function ChatBox(props){
 
             let newMessage = {
                 username:Cookies.get("user"),
-                text:message
+                text:message,
+                roomName:props.roomName
             };
 
             if(!socket.connected){
@@ -25,6 +26,7 @@ function ChatBox(props){
 
             props.addMessage(newMessage); // Call the function to update state in Chat
             socket.emit('message', newMessage);
+            //socket.to(props.roomName).emit('message', newMessage);
             setMessage('');
             return;
         }
@@ -67,6 +69,8 @@ function Messages(props){
 function Chat(){
 
     const [messageStore, setMessageStore] = useState([{username:"user1",text:"hello"}, {username:"user2",text:"Hey"}]);
+    const [loading,setLoading] = useState(false);
+    const [roomName,setroomName] = useState(Cookies.get("roomName"));
     //useState(roomMessages.messages);
 
     const opts = {
@@ -84,15 +88,36 @@ function Chat(){
 
     useEffect(() =>{
         let username = Cookies.get("user");
-        const name = Cookies.get("roomName");
-        
+        const name = roomName;
+        setLoading(true);
+
         fetch(`http://localhost:5000/join?name=${name}`,opts)
-        .then((res) =>res.json())
+        .then((res) =>{
+            if(!res.ok) {
+                throw new Error(`Network response was not ok (${res.status}):${res.statusText}`); // Throw error for non-2xx responses
+              }
+            return res.json(); // Parse JSON if successful
+        })
         .then((messages) =>{
+            
             console.log(messages);
+            alert(`Room ${roomName} joined!!`)
+            socket.emit("joinRoom",roomName);
+
             setMessageStore(messages.messages)
         })
-        .catch((err) => console.log(err));
+        .then(() => setLoading(false))
+        .catch((err) => {
+
+            Cookies.remove("user");
+            Cookies.remove("roomName");
+            setroomName("");
+            socket.disconnect();
+            //console.log(err);
+            alert(`Error ${err.message}`)
+            navigate('/');
+            
+        });
 
         if(!username){          // Checking if the user cookie is set
             alert("Username is required to join the chat!!");
@@ -112,20 +137,27 @@ function Chat(){
 
     const leave = () => {
         Cookies.remove("user");
+        Cookies.remove("roomName");
+        setroomName("");
         socket.disconnect();
         navigate('/');
     };
-
-    return (
-        <div className='container'>
-            <div id="chat-name">
-                <h1>Chat Name</h1>
-                <button id='leave' onClick={leave}>Leave Chat</button>
+    if(loading){
+        return(
+            <h1>Loading...</h1>
+        )
+    }else{
+        return (
+            <div className='container'>
+                <div id="chat-name">
+                    <h1>{roomName}</h1>
+                    <button id='leave' onClick={leave}>Leave Chat</button>
+                </div>
+                <Messages messageStore={messageStore}/>
+                <ChatBox addMessage={addMessage} roomName={roomName}/>
             </div>
-            <Messages messageStore={messageStore}/>
-            <ChatBox addMessage={addMessage}/>
-        </div>
-    )
+        )
+    }
 }
 
 
