@@ -25,6 +25,7 @@ function ChatBox(props){
             }
 
             props.addMessage(newMessage); // Call the function to update state in Chat
+            
             socket.emit('message', newMessage);
             //socket.to(props.roomName).emit('message', newMessage);
             setMessage('');
@@ -68,7 +69,8 @@ function Messages(props){
 
 function Chat(){
 
-    const [messageStore, setMessageStore] = useState([{username:"user1",text:"hello"}, {username:"user2",text:"Hey"}]);
+    const [messageStore, setMessageStore] = useState([]);
+        //[{username:"user1",text:"hello"}, {username:"user2",text:"Hey"}]);
     const [loading,setLoading] = useState(false);
     const [roomName,setroomName] = useState(Cookies.get("roomName"));
     //useState(roomMessages.messages);
@@ -123,6 +125,7 @@ function Chat(){
             alert("Username is required to join the chat!!");
             navigate('/');
         }
+        //socket.to(roomName)
         socket.on('message',(msg) => {
             addMessage(msg);
         });

@@ -68,7 +68,8 @@ io.on('connection',(socket) =>{
     socket.on('message', (msg) =>{
         console.log("Message Received:",msg);       // Remove excess logging later for production
         db[msg.roomName].messages.push(msg);
-        socket.broadcast.emit('message',msg);
+        //socket.broadcast.emit('message',msg);
+        socket.to(msg.roomName).emit("message",msg);
     });
 
     socket.on('joinRoom', (roomName) => {
@@ -81,6 +82,7 @@ io.on('connection',(socket) =>{
         //   }
         //   socket.emit('messages', JSON.parse(messages) || []);
         // });
+        console.log("Socket room Connected!!");
     });
     socket.on('disconnect', () => {
         console.log('A user disconnected');
