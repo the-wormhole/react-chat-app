@@ -23,10 +23,13 @@ app.get("/join",(req,res)=>{
     });
     const roomName = req.query.name;
 
-    if(roomName && roomName.length < 1){
+    if(!roomName){
         return res.status(400).send("Room name can't be empty!!");
     }
 
+    if(roomName.length < 1){
+        return res.status(400).send("Room name can't be empty!!");
+    }
     if(db.hasOwnProperty(roomName)){
         //console.log(db[roomName]);
         return res.status(200).json(db[roomName]);
@@ -45,15 +48,19 @@ app.post("/create",(req,res)=>{
         return res.status(409).send("Room already exists!!");
     }
 
+    if(!roomName){
+        return res.status(400).send("Room name can't be empty!!");
+    }
+
     if(roomName.length < 1){
         return res.status(400).send("Room name can't be empty!!");
     }
     
-    db.roomName = {
+    db[`${roomName}`] = {
         "messages":[]
     };
 
-    return res.status(200).send("Room created!!");
+    return res.status(200).json({message:"Room created!!"});
 });
 io.on('connection',(socket) =>{
     console.log('user connected!!');

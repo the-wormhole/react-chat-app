@@ -98,7 +98,7 @@ function Chat(){
               }
             return res.json(); // Parse JSON if successful
         })
-        .then((messages) =>{
+        .then((messages)=>{
             
             console.log(messages);
             alert(`Room ${roomName} joined!!`)

@@ -1,7 +1,7 @@
 import './styles/App.css';
 import Chat from './Chat.js';
-import {useState} from 'react'
-import { Link, useNavigate, Outlet, Navigate } from "react-router-dom";
+import {useState,useEffect} from 'react'
+import { Link, useNavigate, Outlet } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 function Home(){
@@ -46,6 +46,25 @@ export function CreateChat(){
     }
   
     //make request to websockets to create chat
+    const opts = {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      //body:JSON.stringify({Gquery})
+    };
+
+    fetch(`http://localhost:5000/create?name=${cname}`,opts)
+    .then((res) =>{
+      if(!res.ok) {
+          throw new Error(`Network response was not ok (${res.status}):${res.statusText}`); // Throw error for non-2xx responses
+        }
+      return res.json(); // Parse JSON if successful
+    })
+    .then((room) => {
+      //console.log(room);
+      alert(`Room ${cname} created!!`)
+    })
+    .catch(err => console.log(err));
+
     Cookies.set('user',uname);
     Cookies.set('roomName',cname);
     window.alert(`${cname} was create by user - ${uname}`);
