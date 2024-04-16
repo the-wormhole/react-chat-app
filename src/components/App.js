@@ -45,7 +45,7 @@ export function CreateChat(){
       return;
     }
   
-    //make request to websockets to create chat
+    //make request to Server to create chat
     const opts = {
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -61,14 +61,19 @@ export function CreateChat(){
     })
     .then((room) => {
       //console.log(room);
-      alert(`Room ${cname} created!!`)
+      //alert(`Room ${cname} created!!`)
+      alert(room);
     })
     .catch(err => console.log(err));
 
     Cookies.set('user',uname);
     Cookies.set('roomName',cname);
-    window.alert(`${cname} was create by user - ${uname}`);
-    navigate('/chat');
+    //window.alert(`${cname} was create by user - ${uname}`);
+    
+    setTimeout(() =>{
+      navigate('/chat');
+    },2000)
+    
   }
 
   return(
