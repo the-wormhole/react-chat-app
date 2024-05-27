@@ -1,10 +1,13 @@
 const redis = require("redis");
+const {redis_password,redis_url,redis_port} = require('./config');
 
-const redisClient = redis.createClient(); //left empty to take default values
-// {
-//     host:'localhost',
-//     port:6379,
-// });
+const redisClient = redis.createClient({
+    password: redis_password,
+    socket: {
+        host: redis_url,
+        port: redis_port
+    }
+});
 
 redisClient.connect((err) => {
     if (err) {

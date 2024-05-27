@@ -69,22 +69,8 @@ app.post("/create",async(req,res)=>{
             return res.status(400).json({message:"Room name can't be empty!!"});
         }
 
-        var roomExists = await redisClient.HEXISTS(`rooms:${roomName}`, 'messages'
-        // , (err, exists) => {
-        //     if(err){
-        //     console.error('Error checking for field existence:', err);
-        //     // Handle error appropriately
-        //     }else if(exists){
-        //     console.log('The "messages" field exists in the "rooms:${roomName}" hash.');
-        //     return res.status(409).send("Room already exists!!");
-        //     }else{
-        //     console.log('The "messages" field does not exist in the "rooms:${roomName}" hash.');
-        //     }
-        // }
-        );
-        // if(db.hasOwnProperty(roomName)){
-        //     return res.status(409).send("Room already exists!!");
-        // }
+        var roomExists = await redisClient.HEXISTS(`rooms:${roomName}`, 'messages');
+
         console.log(roomExists);
         if(roomExists){
             
